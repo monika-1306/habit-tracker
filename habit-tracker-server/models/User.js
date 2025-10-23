@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
   xp: Number,
   badges: { type: [String], default: [] },
   gear: { type: [String], default: [] },
-
   avatar: String,
   bio: String,
   goals: String
