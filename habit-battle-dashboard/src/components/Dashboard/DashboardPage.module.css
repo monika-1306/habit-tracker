@@ -1,0 +1,203 @@
+
+
+.dashboard {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #1c1c2e;
+  color: #f0f0f0;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #00f2ff;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+}
+
+.heading {
+  font-size: 1.5rem;
+  color: #00f2ff;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 5px #00f2ff;
+}
+
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 1rem 0;
+  border: 3px solid #00f2ff;
+  box-shadow: 0 0 10px #00f2ff;
+}
+
+.gear {
+  width: 60px;
+  margin-top: 1rem;
+  animation: pulseGear 1s infinite;
+}
+
+@keyframes pulseGear {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.stat {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.levelUpGlow {
+  animation: glowPulse 1s ease-in-out infinite;
+  color: #ffd700;
+  text-shadow: 0 0 10px #ffd700, 0 0 20px #ffec8b;
+}
+
+@keyframes glowPulse {
+  0% {
+    text-shadow: 0 0 5px #ffd700, 0 0 10px #ffec8b;
+  }
+  50% {
+    text-shadow: 0 0 20px #ffd700, 0 0 30px #ffec8b;
+  }
+  100% {
+    text-shadow: 0 0 5px #ffd700, 0 0 10px #ffec8b;
+  }
+}
+
+.progressBar {
+  width: 100%;
+  height: 20px;
+  background-color: #2a2a3d;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  border: 2px solid #00f2ff;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: #00f2ff;
+  transition: width 0.3s ease-in-out;
+}
+
+.habitForm {
+  margin-top: 2rem;
+}
+
+.habitInput {
+  padding: 0.5rem;
+  width: 70%;
+  border: 2px solid #00f2ff;
+  border-radius: 8px;
+  background-color: #2a2a3d;
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.select {
+  padding: 0.5rem;
+  width: 70%;
+  border-radius: 8px;
+  background-color: #2a2a3d;
+  color: white;
+  border: 2px solid #00f2ff;
+  margin-bottom: 1rem;
+}
+
+.habitButton {
+  padding: 0.5rem 1rem;
+  background-color: #00f2ff;
+  color: #1c1c2e;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 8px #00f2ff;
+}
+
+.habitButton:hover {
+  background-color: #00d4e8;
+}
+
+.habitList {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.habitList ul {
+  list-style: none;
+  padding: 0;
+}
+
+.habitList li {
+  background-color: #2a2a3d;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #00f2ff;
+}
+
+.completeButton {
+  padding: 0.3rem 0.75rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 6px #4caf50;
+}
+
+.completeButton:hover {
+  background-color: #43a047;
+}
+
+.badgeSection {
+  margin-top: 2rem;
+}
+
+.badgeSection h4 {
+  margin-bottom: 1rem;
+  color: #ffd700;
+  text-shadow: 0 0 5px #ffd700;
+}
+
+.badge {
+  display: inline-block;
+  background-color: #ffd700;
+  color: #1c1c2e;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 0 8px #ffd700;
+}
+
+.calendarSection {
+  margin-top: 2rem;
+}
+
+.marked {
+  background-color: #00f2ff !important;
+  border-radius: 50%;
+  color: #1c1c2e !important;
+}
+
+.logoutButton {
+  margin-top: 2rem;
+  padding: 0.5rem 1.5rem;
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 8px #ff4c4c;
+}
+
+.logoutButton:hover {
+  background-color: #e53935;
+}

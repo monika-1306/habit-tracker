@@ -1,0 +1,83 @@
+.form {
+  max-width: 500px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background-color: #1c1c2e;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #00f2ff;
+  font-family: 'Press Start 2P', cursive;
+  color: #f0f0f0;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.5rem;
+  color: #00f2ff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 5px #00f2ff;
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin: 1rem 0;
+  color: #ccc;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 2px solid #00f2ff;
+  border-radius: 8px;
+  background-color: #2a2a3d;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.avatarGrid {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.2s ease-in-out;
+}
+
+.avatar:hover {
+  border: 2px solid #00f2ff;
+}
+
+.selected {
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 10px #4caf50;
+}
+
+.button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #00f2ff;
+  color: #1c1c2e;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 8px #00f2ff;
+}
+
+.button:hover {
+  background-color: #00d4e8;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
+}

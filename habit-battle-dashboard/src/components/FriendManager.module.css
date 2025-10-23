@@ -1,0 +1,40 @@
+.friendManager {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.input {
+  padding: 0.5rem;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button {
+  margin-left: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.acceptButton {
+  margin-left: 1rem;
+  padding: 0.3rem 0.8rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.section {
+  margin-top: 2rem;
+}
+
+.message {
+  color: #4caf50;
+  margin-top: 0.5rem;
+}
