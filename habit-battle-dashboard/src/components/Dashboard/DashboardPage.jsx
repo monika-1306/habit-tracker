@@ -15,42 +15,68 @@ const DashboardPage = () => {
   const [selectedHabitDates, setSelectedHabitDates] = useState([]);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token');
+
+  // Redirect immediately if no token
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+    }
+  }, [token, navigate]);
+
+  // Helper function to log errors clearly
+  const logError = (context, err) => {
+    const msg = err.response?.data?.error || err.response?.data || err.message;
+    console.error(`${context} error:`, msg);
+  };
+
+  // Fetch user profile
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await API.get('/users/profile');
+        const res = await API.get('/users/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setUser(res.data);
       } catch (err) {
-        console.error('Profile fetch error:', err.response?.data || err.message);
+        logError('Profile fetch', err);
+        if (err.response?.status === 401) {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }
       }
     };
-    fetchProfile();
-  }, []);
+    if (token) fetchProfile();
+  }, [token, navigate]);
 
+  // Fetch habits
   useEffect(() => {
     const fetchHabits = async () => {
       try {
-        const token = localStorage.getItem('token');
         const res = await API.get('/habits', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setHabits(res.data);
 
-        // Collect all completed dates for calendar
         const allDates = res.data.flatMap(habit =>
           habit.completedDates?.map(date => new Date(date).toDateString()) || []
         );
         setSelectedHabitDates(allDates);
       } catch (err) {
-        console.error('Habit fetch error:', err.response?.data || err.message);
+        logError('Habit fetch', err);
+        if (err.response?.status === 401) {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }
       }
     };
-    fetchHabits();
-  }, []);
+    if (token) fetchHabits();
+  }, [token, navigate]);
 
+  // Create new habit
   const handleCreateHabit = async () => {
+    if (!title || !category) return alert('Please enter habit name and category.');
     try {
-      const token = localStorage.getItem('token');
       const res = await API.post('/habits', { title, category }, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -58,13 +84,13 @@ const DashboardPage = () => {
       setTitle('');
       setCategory('');
     } catch (err) {
-      console.error(err.response?.data?.error || 'Error creating habit');
+      logError('Create habit', err);
     }
   };
 
+  // Complete habit
   const handleCompleteHabit = async (habitId) => {
     try {
-      const token = localStorage.getItem('token');
       const res = await API.post(`/habits/${habitId}/complete`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -94,7 +120,7 @@ const DashboardPage = () => {
 
       setSelectedHabitDates(prev => [...prev, new Date().toDateString()]);
     } catch (err) {
-      console.error(err.response?.data?.error || 'Error completing habit');
+      logError('Complete habit', err);
     }
   };
 
@@ -103,9 +129,11 @@ const DashboardPage = () => {
     navigate('/login');
   };
 
-  const xpPercent = user ? (user.xp / 100) * 100 : 0;
+  const xpPercent = user ? user.xp : 0;
 
-  return user ? (
+  if (!user) return <p className={styles.loading}>Summoning your dashboard...</p>;
+
+  return (
     <div className={styles.dashboard}>
       <h2 className={styles.heading}>Welcome, {user.name}</h2>
 
@@ -115,7 +143,6 @@ const DashboardPage = () => {
         className={styles.avatar}
       />
 
-      {/* ✅ Gear unlock display */}
       {user.gear?.includes('helmet') && (
         <img src="/gear/helmet.png" alt="Helmet" className={styles.gear} />
       )}
@@ -130,7 +157,6 @@ const DashboardPage = () => {
         <div className={styles.progressFill} style={{ width: `${xpPercent}%` }}></div>
       </div>
 
-      {/* ✅ Calendar view */}
       <div className={styles.calendarSection}>
         <h4>📅 Habit Completion Calendar</h4>
         <Calendar
@@ -200,8 +226,6 @@ const DashboardPage = () => {
         Log Out
       </button>
     </div>
-  ) : (
-    <p>Loading...</p>
   );
 };
 

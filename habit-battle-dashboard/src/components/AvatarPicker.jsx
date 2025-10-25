@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import styles from './AvatarPicker.module.css';
 
 const avatarOptions = [
   '/avatars/avatar1.png',
@@ -8,24 +9,22 @@ const avatarOptions = [
 ];
 
 const AvatarPicker = ({ onSelect }) => {
+  const [selected, setSelected] = useState('');
+
+  const handleSelect = (url) => {
+    setSelected(url);
+    onSelect(url);
+  };
+
   return (
-    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+    <div className={styles.grid}>
       {avatarOptions.map((url, index) => (
         <img
           key={index}
           src={url}
-          alt={`avatar-${index}`}
-          onClick={() => onSelect(url)}
-          style={{
-            width: '60px',
-            height: '60px',
-            borderRadius: '50%',
-            cursor: 'pointer',
-            border: '2px solid transparent',
-            transition: '0.2s ease-in-out'
-          }}
-          onMouseOver={e => (e.currentTarget.style.border = '2px solid #2196f3')}
-          onMouseOut={e => (e.currentTarget.style.border = '2px solid transparent')}
+          alt={`Avatar ${index + 1}`}
+          onClick={() => handleSelect(url)}
+          className={`${styles.avatar} ${selected === url ? styles.selected : ''}`}
         />
       ))}
     </div>

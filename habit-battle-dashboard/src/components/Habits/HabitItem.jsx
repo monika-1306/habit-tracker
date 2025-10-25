@@ -1,24 +1,32 @@
+import { useState } from 'react';
 import API from '../../api';
 import styles from '../../styles/HabitItem.module.css';
 
+const HabitItem = ({ habit, onComplete }) => {
+  const [completed, setCompleted] = useState(false);
 
-const HabitItem = ({ habit }) => {
   const handleComplete = async () => {
     try {
-      await API.put(`/habits/${habit._id}`);
-      alert('Habit completed!');
+      const token = localStorage.getItem('token');
+      const res = await API.post(`/habits/${habit._id}/complete`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      setCompleted(true);
+      onComplete?.(res.data); // optional callback to update parent state
     } catch (err) {
-      console.error(err);
+      console.error('Error completing habit:', err.response?.data || err.message);
     }
   };
 
   return (
-    <div className={styles.card}>
-       <h3>{habit.name}</h3>
-       <p>Streak: {habit.streak}</p>
-       <button className={styles.button} onClick={handleComplete}>Complete</button>
+    <div className={`${styles.card} ${completed ? styles.completed : ''}`}>
+      <h3>{habit.title}</h3>
+      <p>🔥 Streak: {habit.streak || 0}</p>
+      <button className={styles.button} onClick={handleComplete} disabled={completed}>
+        {completed ? 'Completed!' : 'Complete'}
+      </button>
     </div>
-
   );
 };
 

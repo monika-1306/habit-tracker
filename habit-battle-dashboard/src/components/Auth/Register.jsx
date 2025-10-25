@@ -15,13 +15,19 @@ const Register = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
-  const handleAvatarSelect = url => setForm(prev => ({ ...prev, avatar: url }));
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAvatarSelect = url => {
+    setForm(prev => ({ ...prev, avatar: url }));
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await API.post('/users/register', form);
+      const res = await API.post('/users/register', form); // ✅ Corrected path and payload
       localStorage.setItem('token', res.data.token);
       navigate('/dashboard');
     } catch (err) {
@@ -31,11 +37,34 @@ const Register = () => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      <h2 className={styles.title}>🛡️ Create Your Hero Profile</h2>
+      <h2 className={styles.title}>🛡️ Register here</h2>
 
-      <input name="name" onChange={handleChange} placeholder="Name" className={styles.input} required />
-      <input name="email" onChange={handleChange} placeholder="Email" className={styles.input} required />
-      <input name="password" type="password" onChange={handleChange} placeholder="Password" className={styles.input} required />
+      <input
+        name="name"
+        value={form.name}
+        onChange={handleChange}
+        placeholder="Name"
+        className={styles.input}
+        required
+      />
+      <input
+        name="email"
+        type="email"
+        value={form.email}
+        onChange={handleChange}
+        placeholder="Email"
+        className={styles.input}
+        required
+      />
+      <input
+        name="password"
+        type="password"
+        value={form.password}
+        onChange={handleChange}
+        placeholder="Password"
+        className={styles.input}
+        required
+      />
 
       <h3 className={styles.subtitle}>Choose Your Avatar</h3>
       <div className={styles.avatarGrid}>

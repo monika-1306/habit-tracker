@@ -7,7 +7,8 @@ const getHabits = async (req, res) => {
     const habits = await Habit.find({ user: req.user._id });
     res.json(habits);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error fetching habits:', error.message);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -15,6 +16,9 @@ const getHabits = async (req, res) => {
 const createHabit = async (req, res) => {
   try {
     const { title, category } = req.body;
+    if (!title || typeof title !== 'string') {
+      return res.status(400).json({ error: 'Habit title is required' });
+    }
 
     const habit = new Habit({
       user: req.user._id,
@@ -27,7 +31,8 @@ const createHabit = async (req, res) => {
     await habit.save();
     res.status(201).json(habit);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error creating habit:', error.message);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -48,13 +53,13 @@ const completeHabit = async (req, res) => {
     if (last === today) {
       return res.status(400).json({ error: 'Habit already completed today' });
     } else if (last === new Date(Date.now() - 86400000).toDateString()) {
-      habit.streak += 1; // continued streak
+      habit.streak += 1;
     } else {
-      habit.streak = 1; // reset streak
+      habit.streak = 1;
     }
 
     habit.lastCompleted = new Date();
-    habit.completedDates.push(new Date()); // ✅ calendar tracking
+    habit.completedDates.push(new Date());
 
     // XP logic
     user.xp += 10;
@@ -62,12 +67,12 @@ const completeHabit = async (req, res) => {
       user.level += 1;
       user.xp = 0;
 
-      // ✅ Gear unlock logic
+      // Gear unlock
       if (user.level === 5 && !user.gear.includes('helmet')) {
         user.gear.push('helmet');
       }
 
-      // ✅ Badge reward
+      // Badge reward
       user.badges.push(`Level ${user.level} Achiever`);
     }
 
@@ -85,7 +90,8 @@ const completeHabit = async (req, res) => {
       gear: user.gear
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error completing habit:', error.message);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 

@@ -6,7 +6,9 @@ const jwt = require('jsonwebtoken');
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, avatar } = req.body;
-    console.log('Registering user:', req.body);
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Name, email, and password are required' });
+    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -22,7 +24,7 @@ const registerUser = async (req, res) => {
       level: 1,
       xp: 0,
       badges: [],
-      avatar, // ✅ Save selected avatar
+      avatar,
       bio: '',
       goals: ''
     });
@@ -47,7 +49,8 @@ const registerUser = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Registration error:', error.message);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -55,6 +58,9 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -84,7 +90,8 @@ const loginUser = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Login error:', error.message);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -95,8 +102,9 @@ const getUserProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.json(user); // ✅ avatar included
-  } catch (err) {
+    res.json(user);
+  } catch (error) {
+    console.error('Profile fetch error:', error.message);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -109,7 +117,8 @@ const getMyBadges = async (req, res) => {
 
     res.status(200).json({ badges: user.badges });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Badge fetch error:', error.message);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -118,7 +127,6 @@ const updateUserProfile = async (req, res) => {
   try {
     const updates = req.body;
     const user = await User.findById(req.user._id);
-
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     user.name = updates.name || user.name;
@@ -143,14 +151,17 @@ const updateUserProfile = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Profile update error:', error.message);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
-// Update avatar (simplified to accept avatar URL)
+// Update avatar
 const updateAvatar = async (req, res) => {
   try {
     const { avatar } = req.body;
+    if (!avatar) return res.status(400).json({ error: 'Avatar URL is required' });
+
     const user = await User.findById(req.user._id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
@@ -162,7 +173,8 @@ const updateAvatar = async (req, res) => {
       avatar: user.avatar
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Avatar update error:', error.message);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 

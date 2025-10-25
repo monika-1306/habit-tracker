@@ -1,0 +1,26 @@
+.profileContainer {
+  text-align: center;
+  margin-top: 2rem;
+  font-family: 'Press Start 2P', cursive;
+  color: #f0f0f0;
+}
+
+.username {
+  font-size: 1.5rem;
+  color: #00f2ff;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 5px #00f2ff;
+}
+
+.stats {
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.xp {
+  color: #ffd700;
+}
+
+.level {
+  color: #4caf50;
+}

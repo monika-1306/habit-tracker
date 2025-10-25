@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import API from '../api';
-import styles from './FriendManager.module.css'; // optional CSS module
+import styles from './FriendManager.module.css';
+import { jwtDecode } from 'jwt-decode';
 
 const FriendManager = () => {
   const [email, setEmail] = useState('');
@@ -8,11 +9,11 @@ const FriendManager = () => {
   const [requests, setRequests] = useState([]);
   const [message, setMessage] = useState('');
 
-  // Fetch accepted friends and pending requests
   useEffect(() => {
     const fetchFriends = async () => {
       try {
         const token = localStorage.getItem('token');
+        const userId = jwtDecode(token).id;
         const res = await API.get('/friends/list', {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -21,7 +22,7 @@ const FriendManager = () => {
         const pending = [];
 
         res.data.forEach(f => {
-          const isRequester = f.requester._id === JSON.parse(atob(token.split('.')[1])).id;
+          const isRequester = f.requester._id === userId;
           const friend = isRequester ? f.recipient : f.requester;
 
           if (f.status === 'accepted') {
@@ -41,29 +42,27 @@ const FriendManager = () => {
     fetchFriends();
   }, []);
 
-  // Send friend request
   const handleSendRequest = async () => {
     try {
       const token = localStorage.getItem('token');
       await API.post('/friends/request', { recipientEmail: email }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setMessage('Friend request sent!');
+      setMessage('✅ Friend request sent!');
       setEmail('');
     } catch (err) {
       setMessage(err.response?.data?.error || 'Error sending request');
     }
   };
 
-  // Accept friend request
   const handleAccept = async (requesterId) => {
     try {
       const token = localStorage.getItem('token');
       await API.post('/friends/accept', { requesterId }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setRequests(prev => prev.filter(r => r.requester._id !== requesterId));
-      setMessage('Friend request accepted!');
+      setRequests(prev => prev.filter(r => r.from._id !== requesterId));
+      setMessage('🎉 Friend request accepted!');
     } catch (err) {
       setMessage(err.response?.data?.error || 'Error accepting request');
     }
@@ -71,7 +70,7 @@ const FriendManager = () => {
 
   return (
     <div className={styles.friendManager}>
-      <h3>Find Friends</h3>
+      <h3 className={styles.title}>🧑‍🤝‍🧑 Find Friends</h3>
       <input
         type="email"
         value={email}
@@ -85,7 +84,7 @@ const FriendManager = () => {
       {message && <p className={styles.message}>{message}</p>}
 
       <div className={styles.section}>
-        <h4>Incoming Requests</h4>
+        <h4>📨 Incoming Requests</h4>
         {requests.length === 0 ? (
           <p>No pending requests</p>
         ) : (
@@ -103,7 +102,7 @@ const FriendManager = () => {
       </div>
 
       <div className={styles.section}>
-        <h4>Your Friends</h4>
+        <h4>🛡️ Your Friends</h4>
         {friends.length === 0 ? (
           <p>No friends yet</p>
         ) : (

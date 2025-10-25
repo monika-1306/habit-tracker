@@ -1,19 +1,67 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: { type: String, unique: true },
-  password: String,
-  level: Number,
-  xp: Number,
-  badges: { type: [String], default: [] },
-  gear: { type: [String], default: [] },
-  avatar: String,
-  bio: String,
-  goals: String
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+      lowercase: true,
+      trim: true
+    },
+    password: {
+      type: String,
+      required: true
+    },
+    level: {
+      type: Number,
+      default: 1
+    },
+    xp: {
+      type: Number,
+      default: 0
+    },
+    badges: {
+      type: [String],
+      default: []
+    },
+    gear: {
+      type: [String],
+      default: []
+    },
+    avatar: {
+      type: String,
+      default: ''
+    },
+    bio: {
+      type: String,
+      default: ''
+    },
+    goals: {
+      type: String,
+      default: ''
+    }
+  },
+  {
+    timestamps: true
+  }
+);
+
+// Hash password before saving
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
+// Compare entered password with hashed password
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
