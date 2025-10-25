@@ -18,6 +18,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // ✅ CORS setup for frontend communication
 const allowedOrigins = [
   'http://localhost:3000',
+  'https://habit-tracker-hazel-omega.vercel.app', // your deployed frontend
 ];
 
 app.use(cors({
